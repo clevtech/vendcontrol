@@ -1,0 +1,11 @@
+telebot
+pymongo
+Flask
+Flask_SocketIO
+Werkzeug
+tqdm
+gevent
+pprint
+Werkzeug
+flask_pymongo
+pipreqs

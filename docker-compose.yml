@@ -1,0 +1,70 @@
+version: "3"
+services:
+  tcp-server:
+    restart: always
+    build: ./tcp-server
+    command: python3 -u server.py
+    ports:
+      - "7777:7777"
+    volumes:
+      - ./tcp-server:/tcp-server/
+    links:
+      - database
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "10"
+    depends_on:
+      - database
+  # flask-add:
+  #   restart: always
+  #   build: ./flask-adding
+  #   command: python3 -u ./flask-adding/app.py
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - .:/cleverest_machine
+  #   links:
+  #     - database
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "1m"
+  #       max-file: "10"
+  #   depends_on:
+  #     - database
+  database:
+    restart: always
+    image: mongo:3.6
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "10"
+  mongo-express:
+    restart: always
+    image: mongo-express
+    environment:
+        - ME_CONFIG_MONGODB_SERVER=database
+        - ME_CONFIG_MONGODB_PORT=27017
+        - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+        - ME_CONFIG_MONGODB_AUTH_DATABASE=vend
+        - ME_CONFIG_BASICAUTH_USERNAME=root
+        - ME_CONFIG_BASICAUTH_PASSWORD=1234
+    ports:
+      - "8081:8081"
+    links:
+      - database
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "10"
+    depends_on:
+      - database
