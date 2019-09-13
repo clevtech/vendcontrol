@@ -58,6 +58,7 @@ def cashin(name, amount, addr):
 
 
 async def analyze(data, name, addr):
+    print(data)
     if name == "boss":
         try:
             who = data.split("-")[0]
@@ -96,7 +97,26 @@ async def handle_echo(reader, writer):
                     writers[name] = writer
                 command = message.split(";")[1]
                 logger.info("Message is: %s from %s", str(command.strip("\n")), str(ip))
-                analyze(command, name, str(ip))
+                if name == "boss":
+                    try:
+                        who = data.split("-")[0]
+                        what = data.split("-")[1]
+                        try:
+                            toclient = writers[who]
+                            toclient.write(what.decode())
+                            await toclient.drain()
+                        except:
+                            raise Exception("there is no client: " + str(who))
+                    except:
+                        raise Exception("boss doesn`t know commands")
+                data = command.strip("\n")
+                logger.info("Data is: " + str(data))
+                if data == "i" or data == "o":
+                    opened(name, data, ip)
+                elif data.isnumeric():
+                    cashin(name, data, ip)
+                else:
+                    raise Exception("command is not in type")
                 writer.write(b"1\n")
                 await writer.drain()
             else:
