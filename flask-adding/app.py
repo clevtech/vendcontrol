@@ -462,4 +462,4 @@ def place(BID):
 
 if __name__ == '__main__':
     # gen_table()
-    socketio.run(app, host='0.0.0.0', port=8888, debug=True)
+    socketio.run(app, host='0.0.0.0', port=80, debug=True)
