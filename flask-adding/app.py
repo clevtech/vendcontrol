@@ -65,7 +65,7 @@ logger = logging.getLogger('tcpserver')
 
 
 # Database setup
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://database:27017/')
 db = client.vend
 
 

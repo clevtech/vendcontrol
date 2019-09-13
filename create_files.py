@@ -88,7 +88,7 @@ def random_date():
 from pymongo import MongoClient
 
 # Database setup
-client = MongoClient('mongodb://0.0.0.0:27017/')
+client = MongoClient('mongodb://database:27017/')
 db = client.vend
 
 def insertVID(doc):
