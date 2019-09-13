@@ -7,10 +7,10 @@ import random
 from tqdm import tqdm
 import datetime
 
-# Logging setup
-# FORMAT = '%(asctime)-15s: %(message)s'
-# logging.basicConfig(format=FORMAT, level='INFO')
-# logger = logging.getLogger('tcpserver')
+Logging setup
+FORMAT = '%(asctime)-15s: %(message)s'
+logging.basicConfig(format=FORMAT, level='INFO')
+logger = logging.getLogger('tcpserver')
 
 
 # MAX_CONNECTIONS = 20
@@ -20,48 +20,48 @@ import datetime
 # client.connect(address_to_server)
 
 
-# def send(val):
-#     client.send(bytes(val, encoding='UTF-8'))
-#     data = client.recv(1024)
-#     # logger.info("Answer to: " + val + ", is: " + str(data))
+def send(val):
+    client.send(bytes(val, encoding='UTF-8'))
+    data = client.recv(1024)
+    # logger.info("Answer to: " + val + ", is: " + str(data))
 
-# bids = [
-#     {
-#         "bid": 1,
-#         "name": {
-#             "ru": "Аэропорт",
-#             "kz": "Ауежай",
-#             "qz": "Auezhai",
-#             "eng": "Airport"
-#         },
-#         "number_of_places": 2
-#     },
-#     {
-#         "bid": 2,
-#         "name": {
-#             "ru": "Поликлиника",
-#             "kz": "Аурухана",
-#             "qz": "Auruhana",
-#             "eng": "Medical center"
-#         },
-#         "number_of_places": 1
-#     }
-# ]
+bids = [
+    {
+        "bid": 1,
+        "name": {
+            "ru": "Аэропорт",
+            "kz": "Ауежай",
+            "qz": "Auezhai",
+            "eng": "Airport"
+        },
+        "number_of_places": 2
+    },
+    {
+        "bid": 2,
+        "name": {
+            "ru": "Поликлиника",
+            "kz": "Аурухана",
+            "qz": "Auruhana",
+            "eng": "Medical center"
+        },
+        "number_of_places": 1
+    }
+]
 
-# vids = [
-#     {
-#         "vid": "1235",
-#         "bid": "1"
-#     },
-#     {
-#         "vid": "1234",
-#         "bid": "1"
-#     },
-#     {
-#         "vid": "2345",
-#         "bid": "2"
-#     }
-# ]
+vids = [
+    {
+        "vid": "1235",
+        "bid": "1"
+    },
+    {
+        "vid": "1234",
+        "bid": "1"
+    },
+    {
+        "vid": "2345",
+        "bid": "2"
+    }
+]
 
 vidss = [
     "2345",
@@ -69,10 +69,10 @@ vidss = [
     "1234"
 ]
 
-# logger.info("Starting to insert cash in")
-# for i in tqdm(range(500)):
-#     msg = "1234" + ";" + random.choice(["200", "500", "1000", "400", "600"])
-#     send(msg)
+logger.info("Starting to insert cash in")
+for i in tqdm(range(500)):
+    msg = "1234" + ";" + random.choice(["200", "500", "1000", "400", "600"])
+    send(msg)
 
 
 def random_date():
@@ -97,13 +97,13 @@ def insertVID(doc):
 def insertBID(doc):
     db.bid.insert_one(doc)
 
-# for bid in bids:
-#     insertBID(bid)
-#     logger.info("Inserted BID: " + str(bid["bid"]))
+for bid in bids:
+    insertBID(bid)
+    logger.info("Inserted BID: " + str(bid["bid"]))
 
-# for vid in vids:
-#     insertVID(vid)
-#     logger.info("Inserted VID: " + str(vid["vid"]))
+for vid in vids:
+    insertVID(vid)
+    logger.info("Inserted VID: " + str(vid["vid"]))
 
 
 def cashin(number):
@@ -130,5 +130,5 @@ def opening(number):
             db.door.insert_one(item_doc)
 
 
-# cashin(50000)
+cashin(50000)
 opening(4)
