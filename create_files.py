@@ -7,7 +7,7 @@ import random
 from tqdm import tqdm
 import datetime
 
-Logging setup
+# Logging setup
 FORMAT = '%(asctime)-15s: %(message)s'
 logging.basicConfig(format=FORMAT, level='INFO')
 logger = logging.getLogger('tcpserver')
