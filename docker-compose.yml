@@ -59,6 +59,7 @@ services:
         - ME_CONFIG_MONGODB_AUTH_DATABASE=vend
         - ME_CONFIG_BASICAUTH_USERNAME=root
         - ME_CONFIG_BASICAUTH_PASSWORD=1234
+        - ME_CONFIG_OPTIONS_READONLY=true
     ports:
       - "8081:8081"
     links:
