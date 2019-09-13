@@ -20,9 +20,9 @@ logger = logging.getLogger('tcpserver')
 # client.connect(address_to_server)
 
 
-def send(val):
-    client.send(bytes(val, encoding='UTF-8'))
-    data = client.recv(1024)
+# def send(val):
+#     client.send(bytes(val, encoding='UTF-8'))
+#     data = client.recv(1024)
     # logger.info("Answer to: " + val + ", is: " + str(data))
 
 bids = [
@@ -69,10 +69,10 @@ vidss = [
     "1234"
 ]
 
-logger.info("Starting to insert cash in")
-for i in tqdm(range(500)):
-    msg = "1234" + ";" + random.choice(["200", "500", "1000", "400", "600"])
-    send(msg)
+# logger.info("Starting to insert cash in")
+# for i in tqdm(range(500)):
+#     msg = "1234" + ";" + random.choice(["200", "500", "1000", "400", "600"])
+#     send(msg)
 
 
 def random_date():
