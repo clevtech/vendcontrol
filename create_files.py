@@ -13,18 +13,6 @@ logging.basicConfig(format=FORMAT, level='INFO')
 logger = logging.getLogger('tcpserver')
 
 
-# MAX_CONNECTIONS = 20
-# address_to_server = ('localhost', 7777)
-
-# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client.connect(address_to_server)
-
-
-# def send(val):
-#     client.send(bytes(val, encoding='UTF-8'))
-#     data = client.recv(1024)
-    # logger.info("Answer to: " + val + ", is: " + str(data))
-
 bids = [
     {
         "bid": 1,
@@ -68,11 +56,6 @@ vidss = [
     "1235",
     "1234"
 ]
-
-# logger.info("Starting to insert cash in")
-# for i in tqdm(range(500)):
-#     msg = "1234" + ";" + random.choice(["200", "500", "1000", "400", "600"])
-#     send(msg)
 
 
 def random_date():
@@ -121,14 +104,22 @@ def opening(number):
     vids = db.cash.distinct("vid")
     for num in tqdm(range(number)):
         for vid in vids:
+            date1 = random_date()
             item_doc = {
                 'vid': vid,
                 'IP': "192.168.1.1",
-                'date': random_date(),
+                'date': date1,
                 'type': "o"
             }
+            item_doc2 = {
+                'vid': vid,
+                'IP': "192.168.1.1",
+                'date': date1 + datetime.timedelta(seconds = 10),
+                'type': "c"
+            }
             db.door.insert_one(item_doc)
+            db.door.insert_one(item_doc2)
 
 
-cashin(50000)
+cashin(500)
 opening(4)
