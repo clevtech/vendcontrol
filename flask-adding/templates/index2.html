@@ -153,36 +153,8 @@
 
           <!-- Main row -->
           <div class="row">
-
-            <!--TABLE-->
-            <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">Банк аппаратов</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body no-padding">
-                  <table class="table table-striped">
-                    <tr>
-                      <th>Аппарат</th>
-                      <th>Здание</th>
-                      <th>Открытие</th>
-                      <th>Закрытие</th>
-                      <th>Время</th>
-                      <th>Собралось</th>
-                      <th>Было собрано</th>
-                    </tr>
-                    {{table_gen}}
-                    
-                  </table>
-                </div><!-- /.box-body -->
-              </div>
-
-              <!--END TABLE-->
-
             <!-- Left col -->
             <section class="col-lg-7 connectedSortable">
-
-              
-
               <!-- Custom tabs (Charts with tabs)-->
               <div class="nav-tabs-custom">
                 <!-- Tabs within a box -->
@@ -238,8 +210,28 @@
               </div><!-- /.box -->
 
             </section><!-- right col -->
+            
           </div><!-- /.row (main row) -->
+          <!--TABLE-->
+          <div class="box">
+              <div class="box-header">
+                <h3 class="box-title">Банк аппаратов</h3>
+              </div><!-- /.box-header -->
+              <div class="box-body no-padding">
+                <table class="table table-striped">
+                  <tr>
+                    <th>Аппарат</th>
+                    <th>Здание</th>
+                    <th>Время</th>
+                    <th>Внос</th>
+                  </tr>
+                  {{table_gen}}
+                  
+                </table>
+              </div><!-- /.box-body -->
+            </div>
 
+            <!--END TABLE-->
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
       <footer class="main-footer">
