@@ -305,6 +305,7 @@ def Average(lst):
     return sum(lst) / len(lst) 
 
 
+# Данные на голове
 def head_charts(BID="All"):
     if BID == "All":
         thisweek = datetime.datetime.now().isocalendar()[1]-1
@@ -381,32 +382,66 @@ def head_charts(BID="All"):
     return sumit, sums, average, clients, min_clients, max_clients, ave_clients
 
 
+def calc_last(vid):
+    d = db.door.find({"vid": vid, "type": "o"}).sort("date", -1)
+    pre_last_open = d[1].copy()["date"]
+    last_open = d[0].copy()["date"]
+    all_of = history(pre_last_open, last_open, vid)
+    summa = '{:20,}'.format(float(data(history(pre_last_open, last_open, vid))[0]))
+    return summa
+
 
 def gen_table(BID="All"):
-    base = '<tr><td>{vid}</td><td>{buildname}</td><td name="timey">{date}</td>\
-            <td><span class="badge bg-red">{amount}</span></td></tr>'
     if BID == "All":
+        base = '<tr><td>{vid}</td><td>{buildname}</td><td name="timey">{date}</td>\
+            <td name="timey">{date_close}</td><td>{delta}</td>\
+            <td><span class="badge bg-red">{amount}</span></td>\
+            <td><span class="badge bg-red">{taken}</span></td></tr>'
         vids = db.cash.distinct("vid")
         bids = db.bid.distinct("bid")
         bidvids = db.vid.find()
         last_opens = []
         for vid in vids:
-            d = db.door.find_one({"vid": vid}).copy()
+            d = db.door.find_one({"vid": vid, "type": "o"}).copy()
+            dc = db.door.find_one({"vid": vid, "type": "c"}).copy()
             v = db.vid.find_one({"vid": vid}).copy()
             name = db.bid.find_one({"bid": int(v["bid"])})["name"]["ru"]
-            start = d["date"]
+            start = dc["date"]
             end = datetime.datetime.utcnow()
+            start2 = d["date"]
+            taken = calc_last(vid)
             summa = '{:20,}'.format(float(data(history(start, end, vid))[0]))
-            last_opens.append({"sum": summa, "time": str(int(datetime.datetime.timestamp(start))), \
-                "vid": vid, "name": name})
+            last_opens.append({"sum": summa, "time": str(int(datetime.datetime.timestamp(start2))), \
+                "vid": vid, "name": name, "time2": str(int(datetime.datetime.timestamp(start))), \
+                    "delta": str((start-start2).total_seconds()), "taken": taken})
         
         msg = ""
         for el in last_opens:
             new = base
             msg = msg + new.replace("{vid}", str(el["vid"])).replace("{buildname}", el["name"])\
-                .replace("{date}", str(el["time"])).replace("{amount}", str(el["sum"]))
+                .replace("{date}", str(el["time"])).replace("{amount}", str(el["sum"]))\
+                    .replace("{date_close}", str(el["time2"])).replace("{delta}", str(el["delta"]))\
+                        .replace("{taken}", str(el["taken"]))
         return msg
+    else:
+        VIDS = db.vid.find({"bid": BID})
+        vids = []
+        for el in VIDS:
+            vids.append({"vid": el["vid"]})
+        print(vids)
+        cashes = db.cash.find({"$or":vids})
+        print(cashes[0])
+        base = '<tr><td>{vid}</td><td>{buildname}</td><td name="timey">{date}</td>\
+            <td><span class="badge bg-red">{amount}</span></td>'
+        msg = ''
+        buildname = db.bid.find_one({"bid": int(BID)})["name"]["ru"]
+        for el in cashes:
+            new = base
+            msg = msg + new.replace("{vid}", str(el["vid"])).replace("{buildname}", buildname)\
+                .replace("{date}", str(int(datetime.datetime.timestamp(el["date"]))))\
+                    .replace("{amount}", str(el["amount"]))
 
+        return msg
 
 # index page
 @app.route('/', methods=['POST', 'GET'])  # Вывод на экраны
@@ -456,9 +491,24 @@ def place(BID):
     name_of_data = db.bid.find_one({"bid": int(BID)})["name"]["ru"]
 
     sumit, sums, average, clients, min_clients, max_clients, ave_clients = head_charts(BID)
-    table_gen = Markup(gen_table())
-    return render_template('index.html', **locals())
+    table_gen = Markup(gen_table(BID))
+    return render_template('index2.html', **locals())
 
+
+@app.route("/datas")
+def datas():
+    head = '<li><a href="/place/{vid}"><i class="fa fa-circle-o"></i>{name}</a></li>'
+
+    head2 = ""
+    names = list(db.bid.find()).copy()
+    new = []
+
+    for el in names:
+        main = head
+        head2 = head2 + main.replace("{vid}", str(el["bid"])).replace("{name}", el["name"]["ru"])
+
+    head = Markup(head2)
+    return render_template('datas.html', **locals())
 
 if __name__ == '__main__':
     # gen_table()
