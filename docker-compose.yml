@@ -17,23 +17,23 @@ services:
   #       max-file: "10"
   #   depends_on:
   #     - database
-  # flask-add:
-  #   restart: always
-  #   build: ./flask-adding
-  #   command: python3 -u ./flask-adding/app.py
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - .:/cleverest_machine
-  #   links:
-  #     - database
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "1m"
-  #       max-file: "10"
-  #   depends_on:
-  #     - database
+  flask-add:
+    restart: always
+    build: ./flask-adding
+    command: python3 -u ./flask-adding/app.py
+    ports:
+      - "80:80"
+    volumes:
+      - .:/cleverest_machine
+    links:
+      - database
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "10"
+    depends_on:
+      - database
   database:
     restart: always
     image: mongo:3.6
@@ -42,8 +42,8 @@ services:
       - MONGO_LOG_DIR=/dev/null
     volumes:
       - ./data/db:/data/db
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     logging:
       driver: "json-file"
       options:
